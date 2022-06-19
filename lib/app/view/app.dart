@@ -34,7 +34,7 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeData>(builder: (ctx, theme) {
       return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Food Court',
         theme: theme,
         initialRoute: Routes.INITIAL,
         routes: AppPages.pages,
