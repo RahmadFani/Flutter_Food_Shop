@@ -1,5 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:my_wallet/food_detail/widgets/app_bar_widget.dart';
 import 'package:my_wallet/home/widgets/top_food_widget.dart';
 
 class FoodDetailPage extends StatelessWidget {
@@ -15,33 +17,29 @@ class FoodDetailPage extends StatelessWidget {
         Hero(
             tag: 'hero_background_${food.id}',
             child: Container(color: Color(int.parse(food.color ?? "0xff")))),
+        Positioned(
+            top: MediaQuery.of(context).size.width * .5,
+            right: 30,
+            width: MediaQuery.of(context).size.width * .5,
+            height: MediaQuery.of(context).size.width * .5,
+            child: Hero(
+              tag: 'hero_image_${food.id}',
+              child: Stack(children: [
+                Opacity(
+                    child: Image.network(food.image ?? "", color: Colors.black),
+                    opacity: 0.5),
+                ClipRect(
+                    child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 15.0),
+                        child: Image.network(
+                          food.image ?? "",
+                        )))
+              ]),
+            )),
         Scaffold(
           backgroundColor: Colors.transparent,
           body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                iconTheme: const IconThemeData(color: Colors.white),
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                bottom: PreferredSize(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      width: double.infinity,
-                      child: Hero(
-                        tag: 'hero_title_${food.id}',
-                        child: Material(
-                          type: MaterialType.transparency,
-                          child: Text(food.title ?? "",
-                              style: GoogleFonts.nunitoSans(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                      ),
-                    ),
-                    preferredSize: const Size.fromHeight(50)),
-              )
-            ],
+            slivers: [FoodDetailAppBarWidget(food: food)],
           ),
         )
       ],

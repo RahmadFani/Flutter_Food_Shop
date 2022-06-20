@@ -155,9 +155,12 @@ class _TopFoodWidgetState extends State<TopFoodWidget> {
                         width: 160,
                         child: Transform.scale(
                           scale: lerp,
-                          child: Image.network(
-                            food.image ?? "",
-                            fit: BoxFit.cover,
+                          child: Hero(
+                            tag: 'hero_image_${food.id}',
+                            child: Image.network(
+                              food.image ?? "",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         )),
                   ),
