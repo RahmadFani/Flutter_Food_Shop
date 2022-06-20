@@ -1,9 +1,9 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:my_wallet/food_detail/food_detail.dart';
 
 class TopFoodWidget extends StatefulWidget {
   const TopFoodWidget({Key? key}) : super(key: key);
@@ -46,7 +46,7 @@ class _TopFoodWidgetState extends State<TopFoodWidget> {
         itemCount: list.length,
         controller: pageController,
         itemBuilder: (_, index) {
-          TopFoodModel food = list[index];
+          FoodModel food = list[index];
           final lerp = lerpDouble(1, 0, (index - page).abs())!;
           double opacity = lerpDouble(1.0, 0.0, (index - page).abs())!.abs();
           double right = lerpDouble(
@@ -61,10 +61,12 @@ class _TopFoodWidgetState extends State<TopFoodWidget> {
             height: double.infinity,
             child: Stack(clipBehavior: Clip.none, children: [
               Positioned(
-                  width: MediaQuery.of(context).size.width * .5,
-                  right: right,
-                  top: 16,
-                  bottom: 16,
+                width: MediaQuery.of(context).size.width * .5,
+                right: right,
+                top: 16,
+                bottom: 16,
+                child: Hero(
+                  tag: 'hero_background_${food.id}',
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: margin),
                     decoration: BoxDecoration(
@@ -79,37 +81,64 @@ class _TopFoodWidgetState extends State<TopFoodWidget> {
                         )
                       ],
                     ),
-                    padding: const EdgeInsets.all(16),
-                    child: Opacity(
-                      opacity: opacity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            food.title ?? "",
-                            textAlign: TextAlign.end,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.nunitoSans(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            food.description ?? "",
-                            textAlign: TextAlign.end,
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.nunitoSans(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 13),
-                          ),
-                        ],
+                  ),
+                ),
+              ),
+              Positioned(
+                  width: MediaQuery.of(context).size.width * .5,
+                  right: right,
+                  top: 16,
+                  bottom: 16,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context, PageRouteBuilder(pageBuilder:
+                          (context, animation, secondaryAnimation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: FoodDetailPage(food: food),
+                        );
+                      }));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: margin),
+                      padding: const EdgeInsets.all(16),
+                      child: Opacity(
+                        opacity: opacity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Hero(
+                              tag: 'hero_title_${food.id}',
+                              child: Material(
+                                type: MaterialType.transparency,
+                                child: Text(
+                                  food.title ?? "",
+                                  textAlign: TextAlign.end,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.nunitoSans(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              food.description ?? "",
+                              textAlign: TextAlign.end,
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.nunitoSans(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 13),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   )),
@@ -158,22 +187,22 @@ class _TopFoodWidgetState extends State<TopFoodWidget> {
   }
 }
 
-List<TopFoodModel> list = [
-  TopFoodModel(
+List<FoodModel> list = [
+  FoodModel(
       id: "1",
       title: 'Taco Salad Tortilla Bowl',
       image: "https://www.pngmart.com/files/1/Taco-Salad-Tortilla-Bowl-PNG.png",
       color: "0xff3e2c91",
       description:
           "Make Amazing Taco Salad Recipes at home with these ultra-crispy Bubbly Taco Salad Bowls. Learn How To Make Tortilla Bowls just like your favorite Mexican restaurant… Without deep frying!"),
-  TopFoodModel(
+  FoodModel(
       id: "2",
       title: 'Habit Burger Salad',
       image: "https://www.pngmart.com/files/1/Habit-Burger-Salad-PNG.png",
       color: "0xffffaaaa",
       description:
           "Make Amazing Taco Salad Recipes at home with these ultra-crispy Bubbly Taco Salad Bowls. Learn How To Make Tortilla Bowls just like your favorite Mexican restaurant… Without deep frying!"),
-  TopFoodModel(
+  FoodModel(
       id: "3",
       title: 'Tobaco',
       image: "https://www.pngmart.com/files/1/Taco-Salad-Tortilla-Bowl-PNG.png",
@@ -182,16 +211,16 @@ List<TopFoodModel> list = [
           "Make Amazing Taco Salad Recipes at home with these ultra-crispy Bubbly Taco Salad Bowls. Learn How To Make Tortilla Bowls just like your favorite Mexican restaurant… Without deep frying!"),
 ];
 
-class TopFoodModel {
+class FoodModel {
   String? id;
   String? title;
   String? description;
   String? image;
   String? color;
 
-  TopFoodModel({this.id, this.title, this.description, this.image, this.color});
+  FoodModel({this.id, this.title, this.description, this.image, this.color});
 
-  TopFoodModel.fromJson(Map<String, dynamic> json) {
+  FoodModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     description = json['description'];

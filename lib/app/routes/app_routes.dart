@@ -4,4 +4,5 @@ part of './app_pages.dart';
 
 abstract class Routes {
   static const INITIAL = '/';
+  static const FOOD_DETAIL = '/food_detail';
 }
